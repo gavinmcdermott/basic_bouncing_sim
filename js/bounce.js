@@ -9,6 +9,7 @@ $(function(){
 		y1: 0
 	};
 	// capture window resize events to change bounds
+	// thanks stackOverflow - http://bit.ly/VsOxHX
 	$(window).resize(function(){
 		bounds.x2 = $(window).width();
 		bounds.y2 = $(window).height();
@@ -30,15 +31,22 @@ $(function(){
 		removeFromView: function() {
 			$(this).remove();
 		},
-		render: function() {
-			// scale the GRAVITY vector, then add to current vector
+		move: function() {
+			// scale the GRAVITY vector,
+			// then add the resulting vector to the ball's current vector
 			this.vector = this.vector.add(GRAVITY.scale(0.1));
+
+			// change the x and y position of the ball
+
+			// check for collisions and change appropriately
+
+			// set styling for the movement on screen to actuallly render
 
 
 		}
 	};
 
-	// var ball = new GravityBall(300, 150);
+	var ball = new GravityBall(300, 150);
 
 });
 
