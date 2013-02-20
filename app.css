@@ -1,5 +1,6 @@
 .dot {
 	border: 10px solid blue;
+	border-radius: 10px;
 	background: blue;
 	position: absolute;
 }

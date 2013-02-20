@@ -9,12 +9,8 @@ var Vector = function(x1, x2) {
 	this.x2 = x2;
 };
 Vector.prototype.addVector = function(vector) {
-	this.x1 = this.x1 + vector.x1;
-	this.x2 = this.x2 + vector.x2;
-	return this;
+	return new Vector(this.x1 + vector.x1, this.x2 + vector.x2);
 };
-Vector.prototype.scalar = function(newScalar) {
-	this.x1 = this.x1 * newScalar;
-	this.x2 = this.x2 * newScalar;
-	return this;
+Vector.prototype.scale = function(newScale) {
+	return new Vector(this.x1 * newScale, this.x2 * newScale)
 };

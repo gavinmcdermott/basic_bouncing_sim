@@ -1,7 +1,7 @@
 $(function(){
 	// set up my world rules
 	var GRAVITY = new Vector(0, 9.81);
-	var DRAG = 0.70;
+	var DRAG = 0.72;
 
 	// set up my world boundaries
 	var bounds = {
@@ -17,7 +17,7 @@ $(function(){
 
 	// make a new GravityBall :) Constructor and Prototype
 	window.GravityBall = function(point, velocity) {
-		this.velocity = velocity || new Vector(-10,0);
+		this.velocity = velocity || new Vector(10,10);
 		this.position = point;
 		// add it to page
 		this.$domNode = $('<div class="dot"></div>');
@@ -29,40 +29,42 @@ $(function(){
 		removeFromView: function() {
 			$(this.$domNode).css({'display': 'none'});
 		},
-		move: function() {
-			// then add the resulting vector to the ball's current vector
-			this.velocity = this.velocity.addVector(GRAVITY);
-
-			// check for collisions and change appropriately
-			// Hat tip to Shawn on having me set the position to the bounds :)
+		// Hat tip to Shawn on having me set the position to the bounds :)
+		// setting the position to the screen boundary tricks the eye into
+		// seeing  collision only with that item
+		checkVerticalBounds: function(){
 			if (this.position.y < bounds.y1) {
-				console.log("hit top");
 				this.velocity.x2 = -this.velocity.x2 * DRAG;
 				this.position.y = bounds.y1;
 			} else if (this.position.y > bounds.y2) {
-				console.log("hit bottom");
 				this.velocity.x2 = -this.velocity.x2 * DRAG;
 				this.position.y = bounds.y2;
-			};
-
+			}
+		},
+		checkHorizontalBounds: function() {
 			if (this.position.x < bounds.x1){
-				console.log("hit left");
 				this.velocity.x1 = -this.velocity.x1 * DRAG;
 				this.position.x = bounds.x1;
 			} else if (this.position.x > bounds.x2) {
-				console.log("hit hit right");
 				this.velocity.x1 = -this.velocity.x1 * DRAG;
 				this.position.x = bounds.x2;
-			};
-
-			// change the x and y position of the ball
+			}
+		},
+		throwBall: function() {
+			// add gravity to the current ball's vector - but scale it by a little bit
+			// http://stackoverflow.com/questions/342189/how-do-i-apply-gravity-to-my-bouncing-ball-application
+			this.velocity = this.velocity.addVector(GRAVITY.scale(0.2));
+			// check for collisions with walls
+			this.checkVerticalBounds();
+			this.checkHorizontalBounds();
+			// change the x and y position of the ball based on the velocity changes
+			// from the collision checks
 			this.position.x += this.velocity.x1;
 			this.position.y += this.velocity.x2;
-
-			// set styling for the movement on screen to actuallly render
+			// set styling
 			$(this.$domNode).css({
-			    top: this.position.y,
-			    left: this.position.x
+				top: this.position.y,
+				left: this.position.x
 			});
 			return;
 		}
@@ -72,14 +74,14 @@ $(function(){
 
 	$(document).mousedown(function(event){
 		var ball = new Point(event.pageX, event.pageY);
-		var vec = new Vector(50, -50);
+		var vec = new Vector(30, -23);
 		var b = new GravityBall(ball, vec);
-		window.gravityBalls.push(b)
+		window.gravityBalls.push(b);
 	});
 
 	setInterval(function(){
 		for (var i = 0; i < window.gravityBalls.length; i++) {
-		    window.gravityBalls[i].move();
+			window.gravityBalls[i].throwBall();
 		}
 	}, 30);
 
