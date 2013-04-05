@@ -1,3 +1,12 @@
+body {
+	overflow: hidden;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	height: 100%
+}
+
 .dot {
 	border: 10px solid blue;
 	border-radius: 10px;
